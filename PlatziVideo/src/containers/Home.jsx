@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/Header';
+import { connect } from 'react-redux';
 import Search from '../components/Search';
 import Categories from '../components/Categories';
 import Carousel from '../components/Carousel';
 import CarouselItem from '../components/CarouselItem';
-import Footer from '../components/Footer';
 import useInitialState from '../hooks/useInitialState';
 import '../assets/styles/App.scss';
 
-const API = 'http://localhost:3000/initalState';
-
-const Home = () => {
-  const initialState = useInitialState(API);
-  return initialState.length === 0 ? <h1>Loading...</h1> : (
+const Home = ({ mylist, trends, originals }) => {
+  return (
     <>
       <Search />
-      {initialState.mylist.length > 0 && (
+      {mylist.length > 0 && (
         <Categories title='Mi lista'>
           <Carousel>
             <CarouselItem />
@@ -24,16 +20,25 @@ const Home = () => {
       )}
       <Categories title='Tendencias'>
         <Carousel>
-          {initialState.trends.map((item) => <CarouselItem {...item} key={item.id} />)}
+          {trends.map((item) => <CarouselItem {...item} key={item.id} />)}
         </Carousel>
       </Categories>
 
       <Categories title='Originales de Platzi Video'>
         <Carousel>
-          {initialState.originals.map((item) => <CarouselItem {...item} key={item.id} />)}
+          {originals.map((item) => <CarouselItem {...item} key={item.id} />)}
         </Carousel>
       </Categories>
     </>
   );
 };
-export default Home;
+
+const mapStateToProps = (state) => {
+  return {
+    mylist: state.mylist,
+    trends: state.trends,
+    originals: state.originals,
+  };
+};
+
+export default connect(mapStateToProps, null)(Home);
