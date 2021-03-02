@@ -32,6 +32,13 @@ const reducer = (state, action) => {
       };
     }
     break;
+    case 'REGISTER_REQUEST': {
+      return {
+        ...state,
+        user: action.payload,
+      };
+    }
+    break;
     default:
       return state;
   }
